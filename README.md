@@ -96,29 +96,35 @@ La commande `whoami` exécutée sur le poste client confirme que la session est 
 
 Ce projet m'a permis de mettre en pratique les concepts fondamentaux de l'administration système : l'interaction entre le DHCP, le DNS et Active Directory lors de l'intégration d'un poste de travail. Cette réalisation constitue une base solide pour la gestion de parc informatique et le support utilisateur en entreprise.
 
-## ⚡ Automatisation : Provisioning d'utilisateurs Active Directory (PowerShell & CSV)
+# 🛠️ Maquette Windows Server 2025 : AD DS, DHCP, DNS & Automatisation PowerShell
 
-Afin d'optimiser l'administration du domaine `entreprise.local`, la création et l'affectation des utilisateurs dans leurs Unités d'Organisation (OU) et groupes de sécurité respectifs ont été entièrement automatisées via un script PowerShell interagissant avec un fichier CSV source.
-
----
-
-### 📁 1. Architecture des fichiers
-
-Les scripts de déploiement sont stockés sur le serveur dans le répertoire `C:\Scripts\` :
-
-![Structure du répertoire Scripts](docs/scripts-directory.png)
-
-- **`nouveaux_collaborateurs.csv`** : Base de données d'entrée contenant la liste des collaborateurs transmise par le service RH.
-- **`ADUsers.ps1`** : Script PowerShell effectuant l'importation, le nettoyage des données et le provisioning dans Active Directory.
+Ce dépôt rassemble la documentation technique et les scripts de déploiement d'une infrastructure réseau sous **Windows Server 2025**, combinant les services de domaine **Active Directory (AD DS)**, **DHCP**, **DNS**, ainsi qu'une solution d'**automatisation du provisioning d'utilisateurs** en PowerShell.
 
 ---
 
-### 📄 2. Structure de la source de données (`nouveaux_collaborateurs.csv`)
+## 📌 Vue d'ensemble du Projet
 
-Le fichier utilise le séparateur point-virgule (`;`) et est encodé en **UTF-8 avec BOM** pour garantir la prise en charge des caractères accentués.
+L'objectif de ce projet est de modéliser l'infrastructure réseau et l'annuaire d'une entreprise (`entreprise.local`), puis d'industrialiser la création et l'affectation des nouveaux collaborateurs à partir d'un fichier transmis par le service RH.
 
-```csv
-Prenom;Nom;Departement
-Sophie;Martin;RH
-Lucas;Bernard;Technique
-Emma;Petit;RH
+### Fiche technique de l'environnement :
+* **Système d'exploitation :** Windows Server 2025 Datacenter
+* **Nom de domaine AD :** `entreprise.local`
+* **Rôles installés :** AD DS (Domain Controller), DNS Server, DHCP Server
+* **Unités d'Organisation (OU) :** `RH`, `Technique`
+* **Groupes de Sécurité :** `RH`, `Technique`
+
+---
+
+## 📁 Structure du Dépôt GitHub
+
+```text
+Maquette-Windows-Server-2025-AD-DHCP-DNS/
+├── README.md
+├── docs/
+│   ├── github-upload.png              # Upload des fichiers via l'interface GitHub
+│   ├── execution-powershell.png       # Exécution du script PowerShell dans le terminal
+│   ├── ad-ou-rh.png                   # Vérification de l'OU RH dans dsa.msc
+│   └── ad-ou-technique.png            # Vérification de l'OU Technique dans dsa.msc
+└── scripts/
+    ├── ADUsers.ps1                    # Script PowerShell d'automatisation
+    └── nouveaux_collaborateurs.csv    # Source de données RH au format CSV
