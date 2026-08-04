@@ -95,3 +95,30 @@ La commande `whoami` exécutée sur le poste client confirme que la session est 
 ## Conclusion & Apprentissage
 
 Ce projet m'a permis de mettre en pratique les concepts fondamentaux de l'administration système : l'interaction entre le DHCP, le DNS et Active Directory lors de l'intégration d'un poste de travail. Cette réalisation constitue une base solide pour la gestion de parc informatique et le support utilisateur en entreprise.
+
+## ⚡ Automatisation : Provisioning d'utilisateurs Active Directory (PowerShell & CSV)
+
+Afin d'optimiser l'administration du domaine `entreprise.local`, la création et l'affectation des utilisateurs dans leurs Unités d'Organisation (OU) et groupes de sécurité respectifs ont été entièrement automatisées via un script PowerShell interagissant avec un fichier CSV source.
+
+---
+
+### 📁 1. Architecture des fichiers
+
+Les scripts de déploiement sont stockés sur le serveur dans le répertoire `C:\Scripts\` :
+
+![Structure du répertoire Scripts](docs/scripts-directory.png)
+
+- **`nouveaux_collaborateurs.csv`** : Base de données d'entrée contenant la liste des collaborateurs transmise par le service RH.
+- **`ADUsers.ps1`** : Script PowerShell effectuant l'importation, le nettoyage des données et le provisioning dans Active Directory.
+
+---
+
+### 📄 2. Structure de la source de données (`nouveaux_collaborateurs.csv`)
+
+Le fichier utilise le séparateur point-virgule (`;`) et est encodé en **UTF-8 avec BOM** pour garantir la prise en charge des caractères accentués.
+
+```csv
+Prenom;Nom;Departement
+Sophie;Martin;RH
+Lucas;Bernard;Technique
+Emma;Petit;RH
