@@ -96,35 +96,33 @@ La commande `whoami` exécutée sur le poste client confirme que la session est 
 
 Ce projet m'a permis de mettre en pratique les concepts fondamentaux de l'administration système : l'interaction entre le DHCP, le DNS et Active Directory lors de l'intégration d'un poste de travail. Cette réalisation constitue une base solide pour la gestion de parc informatique et le support utilisateur en entreprise.
 
-# 🛠️ Maquette Windows Server 2025 : AD DS, DHCP, DNS & Automatisation PowerShell
+# Automatisation du Provisioning Active Directory avec PowerShell
 
-Ce dépôt rassemble la documentation technique et les scripts de déploiement d'une infrastructure réseau sous **Windows Server 2025**, combinant les services de domaine **Active Directory (AD DS)**, **DHCP**, **DNS**, ainsi qu'une solution d'**automatisation du provisioning d'utilisateurs** en PowerShell.
-
----
-
-## 📌 Vue d'ensemble du Projet
-
-L'objectif de ce projet est de modéliser l'infrastructure réseau et l'annuaire d'une entreprise (`entreprise.local`), puis d'industrialiser la création et l'affectation des nouveaux collaborateurs à partir d'un fichier transmis par le service RH.
-
-### Fiche technique de l'environnement :
-* **Système d'exploitation :** Windows Server 2025 Datacenter
-* **Nom de domaine AD :** `entreprise.local`
-* **Rôles installés :** AD DS (Domain Controller), DNS Server, DHCP Server
-* **Unités d'Organisation (OU) :** `RH`, `Technique`
-* **Groupes de Sécurité :** `RH`, `Technique`
+Ce projet présente la mise en place d'un script d'automatisation PowerShell permettant la création et la gestion automatisées des comptes utilisateurs dans Active Directory (AD DS) à partir d'un fichier CSV fourni par le service RH.
 
 ---
 
-## 📁 Structure du Dépôt GitHub
+## Objectifs du Projet
+
+- Automatiser la création des comptes utilisateurs Active Directory.
+- Standardiser la génération des identifiants (SamAccountName) sans caractères accentués.
+- Classer automatiquement les utilisateurs dans leurs Unités d'Organisation (OU) respectives.
+- Assigner dynamiquement les utilisateurs aux groupes de sécurité correspondant à leur département.
+- Exiger le changement de mot de passe à la première ouverture de session.
+
+---
+
+## Structure du Dépôt GitHub
 
 ```text
 Maquette-Windows-Server-2025-AD-DHCP-DNS/
 ├── README.md
 ├── docs/
-│   ├── github-upload.png              # Upload des fichiers via l'interface GitHub
-│   ├── execution-powershell.png       # Exécution du script PowerShell dans le terminal
-│   ├── ad-ou-rh.png                   # Vérification de l'OU RH dans dsa.msc
-│   └── ad-ou-technique.png            # Vérification de l'OU Technique dans dsa.msc
+│   ├── 01-dossier-scripts.png
+│   ├── 02-upload-github.png
+│   ├── 03-execution-powershell.png
+│   ├── 04-verification-ou-rh.png
+│   └── 05-verification-ou-technique.png
 └── scripts/
-    ├── ADUsers.ps1                    # Script PowerShell d'automatisation
-    └── nouveaux_collaborateurs.csv    # Source de données RH au format CSV
+    ├── ADUsers.ps1
+    └── nouveaux_collaborateurs.csv
