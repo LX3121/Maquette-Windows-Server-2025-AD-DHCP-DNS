@@ -96,33 +96,60 @@ La commande `whoami` exécutée sur le poste client confirme que la session est 
 
 Ce projet m'a permis de mettre en pratique les concepts fondamentaux de l'administration système : l'interaction entre le DHCP, le DNS et Active Directory lors de l'intégration d'un poste de travail. Cette réalisation constitue une base solide pour la gestion de parc informatique et le support utilisateur en entreprise.
 
-# Automatisation du Provisioning Active Directory avec PowerShell
+# Document Technique : Automatisation du Provisioning Active Directory via PowerShell
 
-Ce projet présente la mise en place d'un script d'automatisation PowerShell permettant la création et la gestion automatisées des comptes utilisateurs dans Active Directory (AD DS) à partir d'un fichier CSV fourni par le service RH.
-
----
-
-## Objectifs du Projet
-
-- Automatiser la création des comptes utilisateurs Active Directory.
-- Standardiser la génération des identifiants (SamAccountName) sans caractères accentués.
-- Classer automatiquement les utilisateurs dans leurs Unités d'Organisation (OU) respectives.
-- Assigner dynamiquement les utilisateurs aux groupes de sécurité correspondant à leur département.
-- Exiger le changement de mot de passe à la première ouverture de session.
+Ce document détaille la démarche de création automatisée de comptes utilisateurs Active Directory à partir d'un fichier CSV, de la préparation des scripts sur le serveur jusqu'à la vérification de l'arborescence AD DS.
 
 ---
 
-## Structure du Dépôt GitHub
+## 1. Préparation de l'environnement local et des fichiers
 
-```text
-Maquette-Windows-Server-2025-AD-DHCP-DNS/
-├── README.md
-├── docs/
-│   ├── 01-dossier-scripts.png
-│   ├── 02-upload-github.png
-│   ├── 03-execution-powershell.png
-│   ├── 04-verification-ou-rh.png
-│   └── 05-verification-ou-technique.png
-└── scripts/
-    ├── ADUsers.ps1
-    └── nouveaux_collaborateurs.csv
+Les scripts de provisioning ainsi que le fichier source `nouveaux_collaborateurs.csv` sont hébergés localement sur le contrôleur de domaine dans le répertoire dédié `C:\Scripts`.
+
+* **`ADUsers.ps1`** : Script PowerShell assurant la lecture du CSV, la création des comptes dans les bonnes Unités d'Organisation (OU) et l'affectation aux groupes de sécurité.
+* **`nouveaux_collaborateurs.csv`** : Fichier source contenant la liste des collaborateurs, leurs départements et leurs identifiants.
+
+![Répertoire C:\Scripts contenant le script PowerShell et le fichier CSV source](images/3.png)
+
+---
+
+## 2. État initial de la structure Active Directory
+
+Avant l'exécution du script, l'annuaire Active Directory est structuré avec des Unités d'Organisation par service (`RH` et `Technique`). Chaque OU contient initialement son groupe de sécurité respectif, mais aucun compte utilisateur n'y est encore présent.
+
+### Unité d'Organisation RH (État initial)
+![Console dsa.msc montrant l'OU RH contenant uniquement le groupe de sécurité RH](images/1.png)
+
+### Unité d'Organisation Technique (État initial)
+![Console dsa.msc montrant l'OU Technique contenant uniquement le groupe de sécurité Technique](images/2.png)
+
+---
+
+## 3. Exécution du script PowerShell d'automatisation
+
+Le script `ADUsers.ps1` est exécuté depuis une console Windows PowerShell en privilèges administrateur (`C:\Scripts`).
+
+### Actions réalisées par le script :
+* **Parsing du CSV** : Extraction des informations de chaque collaborateur.
+* **Génération du login** : Création automatique du `SamAccountName` (ex: `smartin`, `lbernard`, `epetit`).
+* **Création des comptes** : Ajout des comptes utilisateurs directement dans l'OU cible (`OU=RH` ou `OU=Technique`).
+* **Affectation aux groupes** : Ajout automatique des utilisateurs aux groupes de sécurité associés à leur service.
+* **Vérification CLI** : Contrôle immédiat en fin d'exécution via la commande `Get-ADGroupMember` pour confirmer l'appartenance aux groupes `RH` et `Technique`.
+
+![Exécution du script dans PowerShell et vérification des membres des groupes RH et Technique](images/4.png)
+
+---
+
+## 4. Vérification et validation dans la console Active Directory
+
+Après exécution du script, les comptes sont contrôlés dans la console *Utilisateurs et ordinateurs Active Directory* (`dsa.msc`).
+
+### Validation de l'OU RH
+Les utilisateurs **Sophie Martin** (`smartin`) et **Emma Petit** (`epetit`) ont été créés et rattachés au groupe de sécurité `RH`.
+
+![Console dsa.msc confirmant la présence des comptes Sophie Martin et Emma Petit dans l'OU RH](images/5.png)
+
+### Validation de l'OU Technique
+L'utilisateur **Lucas Bernard** (`lbernard`) a été créé et rattaché au groupe de sécurité `Technique`.
+
+![Console dsa.msc confirmant la présence du compte Lucas Bernard dans l'OU Technique](images/6.png)
